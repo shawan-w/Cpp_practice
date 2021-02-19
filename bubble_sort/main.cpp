@@ -19,7 +19,7 @@ int main()
         }
 
     }
-    cout << "Sorted numbers are: ";
+    cout << "Sorted numbers: ";
     for (i = 0; i < N; i++){
         cout << Numbers[i] << " ";
     }
