@@ -9,7 +9,7 @@ int main()
     // do normal bank service
     Amy.executeBankService();
 
-    // flirt with Amy
+    // flirt with Amy 
     Amy.respondFlirt();
     return 0;
 }

@@ -1,13 +1,14 @@
-
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
 #include <vector>
 #include <map>
 
+#define INVALID_LOGINACCNUM     -1
+
 using namespace std;
 
-class InsufficientBalnce {};
+class InsufficientBalance {};
 
 class Account {
 
@@ -15,13 +16,15 @@ private:
     int accNumber;
     string firstName;
     string lastName;
+    string accName;
+    string password;
     float balance;
     static int nextAccNumber;   // counter
 
 public:
     // Constructors
     Account(){}
-    Account(string firstName, string lastName, float balance); 
+    Account(string firstName, string lastName, string accName, string password, float balance);
 
     // Accessors
     int getAccNumber() {
@@ -37,6 +40,14 @@ public:
         return balance;
     }
 
+    // return true if the accname and password are matched
+    bool checkAccNameAndPassword(string accName, string password) {
+        if (this->accName.compare(accName) != 0) return false;
+        if (this->password.compare(password) != 0) return false;
+
+        return true;
+    }
+
     // Member functions
     void Deposit(float amount);
     void Withdraw(float amount);
@@ -47,28 +58,47 @@ public:
     friend ofstream& operator << (ofstream& ofs, Account& acc);
     friend ifstream& operator >> (ifstream& ifs, Account& acc);
     friend ostream& operator << (ostream& os, Account& acc);
-
-
 };
 int Account::nextAccNumber = 0; // Scope resolution
 
 class Bank {
 private:
+    // account list
     map<int, Account> accounts;
+
+    // this is to store the successfull logged in number, -1: not logged in
+    int loginAccNumber;
+
+    // currently logged in account
+    Account loginAccount;
 public:
     Bank();
 
-    // Member functions
-    Account OpenAccount(string firstName, string lastName, float balance);
-    Account BanlanceCheck(int accNumber);
-    Account Deposit(int accNumber, float amount);
-    Account Withdraw(int accNumber, float amount);
-    void CloseAccount(int accNumber);
-    void ShowAllAccounts();
+    // --- Member functions ---
+
+    // open account
+    Account OpenAccount(string firstName, string lastName, string accName, string password, float balance);
+
+    // login account by accName and password, return true if successful
+    bool login(string accName, string password);
+
+    // assign balance to argument, return false if not logged in
+    bool BalanceCheck(float &balance);
+
+    // deposit amount to account, return false if not logged in
+    bool Deposit(float amount);
+
+    // withdraw amount from account, return false if not logged in
+    bool Withdraw(float amount);
+
+    // close account, return false if not logged in
+    bool CloseAccount();
+
+    // return current account
+    bool GetAccount(Account &account);
+
     ~Bank();    //destructor
 };
-
-
 
 // Tips for Getting Started: 
 //   1. Use the Solution Explorer window to add/manage files
@@ -78,12 +108,14 @@ public:
 //   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
 //   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
 
-Account::Account(string firstName, string lastName, float balance)
+Account::Account(string firstName, string lastName, string accName, string password, float balance)
 {
     nextAccNumber++;
     this->accNumber = nextAccNumber;
     this->firstName = firstName;
     this->lastName = lastName;
+    this->accName = accName;
+    this->password = password;
     this->balance = balance;
 }
 
@@ -96,7 +128,7 @@ void Account::Withdraw(float amount)
 {
     if (balance < amount) {
         cout << "Insufficient balance!" << endl;
-        throw InsufficientBalnce(); 
+        throw InsufficientBalance(); 
     }
     balance -= amount;
 }
@@ -111,11 +143,13 @@ int Account::getLastAccountNumber()
     return nextAccNumber;
 }
 
-ofstream & operator << (ofstream& ofs, Account& acc)
+ofstream& operator << (ofstream& ofs, Account& acc)
 {
     ofs << acc.accNumber << endl;
     ofs << acc.firstName << endl;
     ofs << acc.lastName << endl;
+    ofs << acc.accName << endl;
+    ofs << acc.password << endl;
     ofs << acc.balance << endl;
     return ofs;
 }
@@ -125,6 +159,8 @@ ifstream& operator >> (ifstream& ifs, Account& acc)
     ifs >> acc.accNumber;
     ifs >> acc.firstName;
     ifs >> acc.lastName;
+    ifs >> acc.accName;
+    ifs >> acc.password;
     ifs >> acc.balance;
     return ifs;
 }
@@ -155,14 +191,12 @@ Bank::Bank() {
     Account::setLastAccountNumber(account.getAccNumber());
 
     infile.close();
-}   
+}
 
-
-
-Account Bank::OpenAccount(string firstName, string lastName, float balance) {
+Account Bank::OpenAccount(string firstName, string lastName, string accName, string password, float balance) {
     
     ofstream outfile;
-    Account account(firstName, lastName, balance);
+    Account account(firstName, lastName, accName, password, balance);
     accounts.insert(pair<int, Account>(account.getAccNumber(), account));
 
     outfile.open("Bank.data", ios::trunc);
@@ -173,41 +207,75 @@ Account Bank::OpenAccount(string firstName, string lastName, float balance) {
         outfile << itr->second;
     }
     outfile.close();
+
     return account;
 }
-Account Bank::BanlanceCheck(int accNumber) {
 
-    map<int, Account>::iterator itr = accounts.find(accNumber);
-    return itr->second;
-}
-
-Account Bank::Deposit(int accNumber, float amount) {
-    
-    map<int, Account>::iterator itr = accounts.find(accNumber);
-    itr->second.Deposit(amount);
-    return itr->second;
-
-}
-Account Bank::Withdraw(int accNumber, float amount) {
-   
-    map<int, Account>::iterator itr = accounts.find(accNumber);
-    itr->second.Withdraw(amount);
-    return itr->second;
-
-}
-void Bank::CloseAccount(int accNumber) {
-
-    map<int, Account>::iterator itr = accounts.find(accNumber);
-    cout << itr->second << endl;
-    accounts.erase(accNumber);
-}
-void Bank::ShowAllAccounts() {
-
+bool Bank::login(string accName, string password)
+{
     map<int, Account>::iterator itr;
-    for(itr=accounts.begin();itr!=accounts.end();itr++){
-        cout << itr->second << endl;
+    Account currentAccount;
+    for (itr = accounts.begin(); itr != accounts.end(); itr++)
+    {
+        currentAccount = itr->second;
+        if (currentAccount.checkAccNameAndPassword(accName, password) == true) {
+            // if matched, record the login account number and return true
+            this->loginAccNumber = itr->first;
+            return true;
+        }
     }
 
+    // if login failed, assign the loginAccNumber as invalid
+    this->loginAccNumber = INVALID_LOGINACCNUM;
+    return false;
+}
+
+// assign balance to argument, return false if not logged in
+bool Bank::BalanceCheck(float &balance) {
+    if (loginAccNumber == INVALID_LOGINACCNUM ) return false;
+
+    map<int, Account>::iterator itr = accounts.find(loginAccNumber);
+    balance = itr->second.getBalance();
+
+    return true;
+}
+
+bool Bank::Deposit(float amount) {
+    if (loginAccNumber == INVALID_LOGINACCNUM ) return false;
+
+    map<int, Account>::iterator itr = accounts.find(loginAccNumber);
+    itr->second.Deposit(amount);
+
+    return true;
+}
+
+bool Bank::Withdraw(float amount) {
+    if (loginAccNumber == INVALID_LOGINACCNUM ) return false;
+
+    map<int, Account>::iterator itr = accounts.find(loginAccNumber);
+    itr->second.Withdraw(amount);
+
+    return true;
+
+}
+
+bool Bank::CloseAccount() {
+    if (loginAccNumber == INVALID_LOGINACCNUM ) return false;
+
+    map<int, Account>::iterator itr = accounts.find(loginAccNumber);
+    accounts.erase(loginAccNumber);
+
+    return true;
+}
+
+bool Bank::GetAccount(Account &account)
+{
+    if (loginAccNumber == INVALID_LOGINACCNUM ) return false;
+
+    map<int, Account>::iterator itr = accounts.find(loginAccNumber);
+    account = itr->second;
+
+    return true;
 }
 
 Bank::~Bank()
