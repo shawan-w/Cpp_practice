@@ -36,6 +36,9 @@ public:
     string getLastName() {
         return lastName;
     }
+    string getAccName() {
+        return accName;
+    }
     float getBalance() {
         return balance;
     }
@@ -78,6 +81,9 @@ public:
 
     // open account
     Account OpenAccount(string firstName, string lastName, string accName, string password, float balance);
+
+    // check if accName already exits when opening an account
+    bool checkAccDuplicate(string accName);
 
     // login account by accName and password, return true if successful
     bool login(string accName, string password);
@@ -209,6 +215,17 @@ Account Bank::OpenAccount(string firstName, string lastName, string accName, str
     outfile.close();
 
     return account;
+}
+
+bool Bank::checkAccDuplicate(string accName) {
+
+    map<int, Account>::iterator itr;
+    Account currentAccount;
+    for (itr = accounts.begin(); itr != accounts.end(); itr++) {
+        currentAccount = itr->second;
+        if (currentAccount.getAccName() == accName) return true;
+    }
+    return false;
 }
 
 bool Bank::login(string accName, string password)
