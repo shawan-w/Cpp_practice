@@ -2,30 +2,6 @@
 #include "LinkedList.h"
 using namespace std;
 
-
-
-int main()
-{
-    int A[] = { 1, 2, 3, 4, 5, 6 };
-    LinkedList list1(A, 6);
-    
-    list1.DisplayList();
-    cout << "Length of the linked list: " << list1.CountNodes()<<endl;
-
-    list1.InsertNode(3, 99);
-    list1.DisplayList();
-
-    list1.DeleteNode(0);
-    list1.DisplayList();
-
-    list1.DeleteNode(3);
-    list1.DisplayList();
-    cout << "Length of the linked list: " << list1.CountNodes() << endl;
-
-
-    return 0;
-}
-
 LinkedList::LinkedList(int A[], int n)
 {
     Node* tail, * temp;
@@ -44,7 +20,6 @@ LinkedList::LinkedList(int A[], int n)
         tail->next = temp;
         tail = temp;
     }
-
 }
 
 LinkedList::~LinkedList()
@@ -109,6 +84,8 @@ void LinkedList::InsertNode(int index, int x)
         }
     newNode->next = ptr->next;
     ptr->next = newNode;
+
+    cout << "Value " << x << " at index " << index << " has been inserted." << endl;
 }
 
 void LinkedList::DeleteNode(int index)
@@ -119,6 +96,7 @@ void LinkedList::DeleteNode(int index)
     if (index < 0 || index > CountNodes()-1)
     {
         cout << "Invalid index." << endl;
+        return;
     }
 
     ptr = new Node;
@@ -126,6 +104,7 @@ void LinkedList::DeleteNode(int index)
     if (index == 0)
     {
         head = head->next;
+        x = delNode->data;
         delete delNode;
     }
     else
@@ -139,5 +118,7 @@ void LinkedList::DeleteNode(int index)
         x = delNode->data;
         ptr->next = delNode->next;
         delete delNode;
+
     }
+    cout << "Value " << x << " at index " << index << " has been deleted." << endl;
 }
