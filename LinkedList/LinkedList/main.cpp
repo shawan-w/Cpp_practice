@@ -26,10 +26,14 @@ int main()
     cout << "Length of the linked list: " << list1.CountNodes() << endl;
 
     list1.Display_recursive(list1.getHead());
-    cout << endl;
     list1.Display_reversedRecursive(list1.getHead());
+    cout << endl;
 
+    cout << "Sum of all nodes: " << list1.sumAll() << endl;
 
+    list1.search_improved(33);
+    list1.search_improved(99);
+    list1.DisplayList();
 
     return 0;
 }

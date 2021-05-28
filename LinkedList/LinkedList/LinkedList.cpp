@@ -123,6 +123,19 @@ void LinkedList::DeleteNode(int index)
     cout << "Value " << x << " at index " << index << " has been deleted." << endl;
 }
 
+int LinkedList::sumAll()
+{
+    int sum = 0;
+    Node* ptr = head;
+
+    while (ptr != NULL)
+    {
+        sum += ptr->data;
+        ptr = ptr->next;
+    }
+    return sum;
+}
+
 Node* LinkedList::getHead()
 {
     return head;
@@ -144,4 +157,27 @@ void LinkedList::Display_reversedRecursive(Node* ptr)
         Display_reversedRecursive(ptr->next);
         cout << ptr->data << " ";
     }
+}
+
+Node* LinkedList::search_improved(int key)
+{
+    Node* ptr = head;   
+    Node* q = new Node;      // q for following ptr
+
+    while (ptr != NULL)
+    {
+        if (ptr->data == key)
+        {
+            q->next = ptr->next;
+            ptr->next = head;
+            head = ptr;
+            cout << key <<" is found and the node is moved to head." << endl;
+            return ptr;
+        }
+        q = ptr;
+        ptr = ptr->next;
+    }
+
+    cout << key<<" is not found." << endl;
+    return NULL;
 }
