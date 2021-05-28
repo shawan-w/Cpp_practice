@@ -122,3 +122,26 @@ void LinkedList::DeleteNode(int index)
     }
     cout << "Value " << x << " at index " << index << " has been deleted." << endl;
 }
+
+Node* LinkedList::getHead()
+{
+    return head;
+}
+
+void LinkedList::Display_recursive(Node* ptr)
+{
+    if (ptr != NULL)
+    {
+        cout << ptr->data << " ";
+        Display_recursive(ptr->next);
+    }
+}
+
+void LinkedList::Display_reversedRecursive(Node* ptr)
+{
+    if (ptr != NULL)
+    {
+        Display_reversedRecursive(ptr->next);
+        cout << ptr->data << " ";
+    }
+}
