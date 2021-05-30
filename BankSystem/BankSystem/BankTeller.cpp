@@ -8,12 +8,11 @@ using namespace std;
 #include "BankTeller.h"
 
 
-void BankTeller::executeBankService()
+void BankTeller::executeBankService(Bank &bank)
 {
     char choiceChar;
     int choiceNum;
 
-    Bank bank;
     Account acc;
     string firstName, lastName, accName, password;
     int accNumber;

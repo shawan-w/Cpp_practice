@@ -1,6 +1,6 @@
 #define INVALID_LOGINACCNUM     -1
 
-class InsufficientBalance {};
+class InsufficientBalance:exception {};
 
 class Account {
 

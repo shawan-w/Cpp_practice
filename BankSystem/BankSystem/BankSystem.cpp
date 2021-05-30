@@ -28,9 +28,13 @@ void Account::Deposit(float amount)
 
 void Account::Withdraw(float amount)
 {
-    if (balance < amount) {
+    while (balance < amount) {
+        float amount_modified;
         cout << "Insufficient balance!" << endl;
-        throw InsufficientBalance();
+        //throw InsufficientBalance();
+        cout << "Enter amount again: " << endl;
+        cin >> amount_modified;
+        amount = amount_modified;
     }
     balance -= amount;
 }

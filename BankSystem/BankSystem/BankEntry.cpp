@@ -7,12 +7,14 @@ using namespace std;
 #include "BankTeller.h"
 
 int main()
-{
+{   
+    Bank bank;
+
     // create a bankteller who helps you with the bank service
     BankTeller Amy;
 
     // do normal bank service
-    Amy.executeBankService();
+    Amy.executeBankService(bank);
 
     // flirt with Amy 
     Amy.respondFlirt();

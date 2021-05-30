@@ -2,7 +2,7 @@
 class BankTeller {
 public:
     // execute SOP when being asked for bank service
-    void executeBankService();
+    void executeBankService(Bank &bank);
 
     // response when someone flirts the teller
     void respondFlirt();
