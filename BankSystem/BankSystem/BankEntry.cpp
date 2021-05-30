@@ -8,13 +8,14 @@ using namespace std;
 
 int main()
 {   
-    Bank bank;
+    // create Bank
+    Bank Bank;
 
-    // create a bankteller who helps you with the bank service
-    BankTeller Amy;
+    // pass Bank to BankTeller by pointer
+    BankTeller Amy(&Bank);  // dereference: &Bank is saved as a pointer member of Amy(Bank *pBank)
 
     // do normal bank service
-    Amy.executeBankService(bank);
+    Amy.executeBankService();
 
     // flirt with Amy 
     Amy.respondFlirt();

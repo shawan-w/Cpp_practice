@@ -1,13 +1,17 @@
 
 class BankTeller {
 public:
+
+    BankTeller(Bank *pBank);
+
     // execute SOP when being asked for bank service
-    void executeBankService(Bank &bank);
+    void executeBankService();
 
     // response when someone flirts the teller
     void respondFlirt();
 
 private:
+    Bank* m_pbank;
     enum EBankServiceOption {
         Opt_OpenAccount = 1,
         Opt_login,

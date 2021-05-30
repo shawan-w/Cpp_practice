@@ -8,7 +8,12 @@ using namespace std;
 #include "BankTeller.h"
 
 
-void BankTeller::executeBankService(Bank &bank)
+BankTeller::BankTeller(Bank* pBank)
+{
+    m_pbank = pBank;
+}
+
+void BankTeller::executeBankService()
 {
     char choiceChar;
     int choiceNum;
@@ -37,7 +42,7 @@ void BankTeller::executeBankService(Bank &bank)
             cin >> lastName;
             cout << "Enter your account name: ";
             cin >> accName;
-            while (bank.checkAccDuplicate(accName))     // True: account name duplicated
+            while (m_pbank->checkAccDuplicate(accName))     // True: account name duplicated
             {
                 cout << "Account name already exists. Enter another name: ";
                 cin >> accName;
@@ -46,7 +51,7 @@ void BankTeller::executeBankService(Bank &bank)
             cin >> password;
             cout << "Enter initial balance: ";
             cin >> balance;
-            acc = bank.OpenAccount(firstName, lastName, accName, password, balance);
+            acc = m_pbank->OpenAccount(firstName, lastName, accName, password, balance);
             cout << "\nAccount is created." << endl;
             cout << acc << endl;
             break;
@@ -56,7 +61,7 @@ void BankTeller::executeBankService(Bank &bank)
             cin >> accName;
             cout << "Enter your password: ";
             cin >> password;
-            if (bank.login(accName, password) == true)
+            if (m_pbank->login(accName, password) == true)
             {
                 cout << "...... Login successful." << endl;
 
@@ -73,7 +78,7 @@ void BankTeller::executeBankService(Bank &bank)
                     switch (choiceNum)
                     {
                     case Opt_BalanceInquiry:     // Balance inquiry
-                        bank.BalanceCheck(balance);
+                        m_pbank->BalanceCheck(balance);
                         cout << "\n Your balance:" << endl;
                         cout << balance << endl;
                         break;
@@ -81,8 +86,8 @@ void BankTeller::executeBankService(Bank &bank)
                     case Opt_Deposit:     // Deposit
                         cout << "Enter amount of deposit: " << endl;
                         cin >> amount;
-                        bank.Deposit(amount);
-                        bank.BalanceCheck(balance);
+                        m_pbank->Deposit(amount);
+                        m_pbank->BalanceCheck(balance);
                         cout << "\n......Deposit successful" << endl;
                         cout << "Your balance:" << endl;
                         cout << balance << endl;
@@ -91,8 +96,8 @@ void BankTeller::executeBankService(Bank &bank)
                     case Opt_Withdraw:     // Withdraw
                         cout << "Enter amount of withdrawl: " << endl;
                         cin >> amount;
-                        bank.Withdraw(amount);
-                        bank.BalanceCheck(balance);
+                        m_pbank->Withdraw(amount);
+                        m_pbank->BalanceCheck(balance);
                         cout << "\n......Withdraw successful" << endl;
                         cout << "\nYour balance:" << endl;
                         cout << balance << endl;
@@ -100,12 +105,12 @@ void BankTeller::executeBankService(Bank &bank)
 
                     case Opt_CloseAccount:     // Close an account
                         cout << "\nYour account details:" << endl;
-                        bank.GetAccount(acc);
+                        m_pbank->GetAccount(acc);
                         cout << acc << endl;
                         cout << "Are you sure you want to close this account? (Y/N)" << endl;
                         cin >> ans;
                         if (ans == 'Y' || ans == 'y') {
-                            bank.CloseAccount();
+                            m_pbank->CloseAccount();
                             cout << " --- account deleted ---" << endl;
                         }
                         else
