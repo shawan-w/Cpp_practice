@@ -1,11 +1,10 @@
 #include <iostream>
 #include <cstdlib>
 #include <map>
-
-using namespace std;
-
 #include "BankSystem.h"
 #include "atm.h"
+
+using namespace std;
 
 ATM::ATM(Bank* pBank)
 {
