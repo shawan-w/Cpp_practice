@@ -1,10 +1,3 @@
-#include <iostream>
-#include <fstream>
-#include <cstdlib>
-#include <vector>
-#include <map>
-
-using namespace std;
 #include"BankSystem.h"
 
 int Account::nextAccNumber = 0; // Scope resolution
