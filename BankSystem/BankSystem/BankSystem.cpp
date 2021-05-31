@@ -1,7 +1,14 @@
+#include <iostream>
+#include <fstream>
+#include <cstdlib>
+#include <vector>
+#include <map>
+using namespace std;
 #include"BankSystem.h"
 
+// #define and static variables
+#define INVALID_LOGINACCNUM     -1
 int Account::nextAccNumber = 0; // Scope resolution
-
 
 Account::Account(string firstName, string lastName, string accName, string password, float balance)
 {
