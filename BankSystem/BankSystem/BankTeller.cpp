@@ -7,7 +7,6 @@ using namespace std;
 #include "BankSystem.h"
 #include "BankTeller.h"
 
-
 BankTeller::BankTeller(Bank* pBank)
 {
     m_pbank = pBank;
@@ -20,7 +19,7 @@ void BankTeller::executeBankService()
 
     Account acc;
     string firstName, lastName, accName, password;
-    int accNumber;
+    //int accNumber;
     float balance, amount;
     char ans; // comfirm to close account
 

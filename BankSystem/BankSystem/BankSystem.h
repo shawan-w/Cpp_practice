@@ -1,3 +1,4 @@
+#pragma once
 #define INVALID_LOGINACCNUM     -1
 
 class InsufficientBalance:exception {};
