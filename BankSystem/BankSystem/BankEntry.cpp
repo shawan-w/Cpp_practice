@@ -2,10 +2,10 @@
 #include <iostream>
 #include <cstdlib>
 #include <map>
-using namespace std;
 #include "BankSystem.h"
-#include "BankTeller.h"
-#include "atm.h"
+#include "Builder.h"
+
+using namespace std;
 
 int main()
 {   
@@ -13,27 +13,28 @@ int main()
 
     // create Bank
     Bank Bank;
+    BankServiceBuilder::Type UserBankServiceType;
+    IBankService *pBankService;
 
     cout << "Select service:\n";
     cout << "1) Bank Teller\n";
     cout << "2) ATM\n";
     cin >> choiceNum;
+    UserBankServiceType = (BankServiceBuilder::Type)(choiceNum - 1);
 
-    if (choiceNum == 1)
-    {// pass Bank to BankTeller by pointer
-        BankTeller Amy(&Bank);  // dereference: &Bank is saved as a pointer member of Amy(Bank *pBank)
+    // builder buils a BankService object according to type
+    pBankService = BankServiceBuilder::Build(UserBankServiceType, &Bank);
 
-        // do normal bank service
-        Amy.executeBankService();
+    assert(pBankService != nullptr);
 
-        // flirt with Amy 
-        Amy.respondFlirt();
-    }
-    else
-    {    //cout << "ATM is still under construction. Plz enter 1) or come back later :)" << endl;
-        ATM atm1(&Bank);
-        atm1.executeBankService();
-        atm1.respondFlirt();
-    }
-        return 0;
+    // do normal bank service
+    pBankService->executeBankService();
+
+    // flirt with bank service
+    pBankService->respondFlirt();
+
+    // delete objects
+    delete pBankService;
+
+    return 0;
 }
