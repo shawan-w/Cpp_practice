@@ -1,3 +1,4 @@
+#include <assert.h>
 #include "BankSystem.h"
 #include "BankTeller.h"
 #include "atm.h"

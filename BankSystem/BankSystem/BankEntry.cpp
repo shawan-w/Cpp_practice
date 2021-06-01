@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <map>
+#include <assert.h>
 #include "BankSystem.h"
 #include "Builder.h"
 

@@ -139,13 +139,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="atm.h" />
     <ClInclude Include="BankSystem.h" />
     <ClInclude Include="BankTeller.h" />
+    <ClInclude Include="Builder.h" />
+    <ClInclude Include="IBankService.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="atm.cpp" />
     <ClCompile Include="BankEntry.cpp" />
     <ClCompile Include="BankSystem.cpp" />
     <ClCompile Include="BankTeller.cpp" />
+    <ClCompile Include="Builder.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
