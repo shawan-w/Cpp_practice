@@ -2,22 +2,40 @@
 #include <iostream>
 #include <cstdlib>
 #include <map>
-using namespace std;
+#include <assert.h>
 #include "BankSystem.h"
-#include "BankTeller.h"
+#include "Builder.h"
+
+using namespace std;
 
 int main()
 {   
+    int choiceNum;
+
     // create Bank
     Bank Bank;
+    BankServiceBuilder::Type UserBankServiceType;
+    IBankService *pBankService;
 
-    // pass Bank to BankTeller by pointer
-    BankTeller Amy(&Bank);  // dereference: &Bank is saved as a pointer member of Amy(Bank *pBank)
+    cout << "Select service:\n";
+    cout << "1) Bank Teller\n";
+    cout << "2) ATM\n";
+    cin >> choiceNum;
+    UserBankServiceType = (BankServiceBuilder::Type)(choiceNum - 1);
+
+    // builder buils a BankService object according to type
+    pBankService = BankServiceBuilder::Build(UserBankServiceType, &Bank);
+
+    assert(pBankService != nullptr);
 
     // do normal bank service
-    Amy.executeBankService();
+    pBankService->executeBankService();
 
-    // flirt with Amy 
-    Amy.respondFlirt();
+    // flirt with bank service
+    pBankService->respondFlirt();
+
+    // delete objects
+    delete pBankService;
+
     return 0;
 }

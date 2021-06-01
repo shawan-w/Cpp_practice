@@ -1,3 +1,8 @@
+#pragma once
+#include <fstream>
+#include <map>
+using namespace std;
+
 #define INVALID_LOGINACCNUM     -1
 
 class InsufficientBalance:exception {};

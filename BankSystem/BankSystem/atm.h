@@ -1,11 +1,11 @@
 #pragma once
 #include "IBankService.h"
 
-class BankTeller : public IBankService
+class ATM : public IBankService
 {
 public:
 
-    BankTeller(Bank *pBank);
+    ATM(Bank* pBank);
 
     // execute SOP when being asked for bank service
     void executeBankService();
@@ -16,12 +16,9 @@ public:
 private:
     Bank* m_pbank;
     enum EBankServiceOption {
-        Opt_OpenAccount = 1,
-        Opt_login,
-        Opt_BalanceInquiry,
+        Opt_BalanceInquiry = 1,
         Opt_Deposit,
         Opt_Withdraw,
-        Opt_CloseAccount,
         Opt_Quit = 0
     };
 };
